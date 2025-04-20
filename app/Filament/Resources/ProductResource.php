@@ -32,8 +32,13 @@ class ProductResource extends Resource
                     ->numeric()
                     ->prefix('Rp'),
                 Forms\Components\FileUpload::make('image')
+                    ->disk('s3')
+                    ->directory('product-images')
                     ->image()
-                    ->directory('products'),
+                    ->imageResizeMode('cover')
+                    ->imageCropAspectRatio('1:1')
+                    ->imageResizeTargetWidth('500')
+                    ->imageResizeTargetHeight('500'),
                 Forms\Components\Toggle::make('is_available')
                     ->required()
                     ->default(true),
@@ -47,7 +52,7 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('image'),
+                Tables\Columns\ImageColumn::make('image')->disk('s3'),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('category.name')
